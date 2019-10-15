@@ -1,7 +1,7 @@
 const dev = {
     username: "root",
     password: "root",
-    database: "nodeMCU",
+    database: "nodemcu",
     host: "localhost",
     dialect: "mysql",
     pool: {

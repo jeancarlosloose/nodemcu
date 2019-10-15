@@ -7,4 +7,6 @@ route.get('/normalsample',ctrlNormalSample.getAll);
 route.get('/unnormalsample',ctrlUnNormalSample.getAll);
 route.get('/postunnormal',ctrlUnNormalSample.insertEx);
 route.get('/lastunnormal',ctrlUnNormalSample.getLastRegister);
+
+
 module.exports = route;

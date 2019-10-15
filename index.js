@@ -19,9 +19,6 @@ router.get('/txt',function(req,res){
   });
 app.use(express.static(__dirname + '/web'));
 
-
-
-
 app.use('/',router);
 
 
