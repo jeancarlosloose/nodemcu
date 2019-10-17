@@ -1,6 +1,16 @@
 const {unNormalSample} = require('../models');
+const {normalSample} = require('../models');
 const sequelize = require('sequelize');
 const Op = require('sequelize').Op
+
+function verifyUnNormal(gas,temperature){
+    if(gas > 770 || temperature > 45.0 ){
+        return true
+    }else
+        return false
+}
+
+
 
 module.exports = {
 
@@ -24,19 +34,28 @@ module.exports = {
         ).catch(err => {res.json(err)})
     },
 
-    async insertEx(){
-        const samples = [
-            {temperature : 20.3, gas: 450},
-            {temperature : 26.3, gas: 650},
-            {temperature : 29.3, gas: 720},
-            {temperature : 38.3, gas: 740},
-        ]
-        unNormalSample.bulkCreate(samples,{
-            returning: true
-        }).then(res =>{
-            console.log(res);
-        })
+    async insertUnNormal(req,res){
+        if(verifyUnNormal(req.body.gas,req.body.temperature)){
+            console.log('deu certo')
+            await unNormalSample.create(
+                    req.body
+                ).then(response =>{
+                    res.json(response)
+                }).catch(err=>{
+                    res.json(err)
+                })
+        }else{
+            console.log("deu errado")
+            await normalSample.create(
+                req.body
+            ).then(response =>{
+                res.json(response)
+            }).catch(err=>{
+                res.json(err)
+            })
+        }
 
+        
     }
 
     

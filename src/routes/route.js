@@ -5,7 +5,7 @@ const ctrlNormalSample = require('../controllers/ctrlNormalSample');
 
 route.get('/normalsample',ctrlNormalSample.getAll);
 route.get('/unnormalsample',ctrlUnNormalSample.getAll);
-route.get('/postunnormal',ctrlUnNormalSample.insertEx);
+route.post('/insertData',ctrlUnNormalSample.insertUnNormal);
 route.get('/lastunnormal',ctrlUnNormalSample.getLastRegister);
 
 

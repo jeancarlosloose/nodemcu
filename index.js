@@ -10,7 +10,7 @@ app.use(express.static(__dirname+'/web'));
 
 app.use(cors());
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({urlencoded: true}))
+
 
 app.use(require('./src/routes/route'))
 
