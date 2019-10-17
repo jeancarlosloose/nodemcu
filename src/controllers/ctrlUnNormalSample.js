@@ -35,23 +35,19 @@ module.exports = {
     },
 
     async insertUnNormal(req,res){
+
+        console.log(req.body)
         if(verifyUnNormal(req.body.gas,req.body.temperature)){
-            console.log('deu certo')
             await unNormalSample.create(
-                    req.body
-                ).then(response =>{
-                    res.json(response)
-                }).catch(err=>{
-                    res.json(err)
-                })
+                req.body
+            ).then(result =>{
+                res.send(result)
+            })
         }else{
-            console.log("deu errado")
             await normalSample.create(
                 req.body
-            ).then(response =>{
-                res.json(response)
-            }).catch(err=>{
-                res.json(err)
+            ).then(result =>{
+                res.send(result)
             })
         }
 
