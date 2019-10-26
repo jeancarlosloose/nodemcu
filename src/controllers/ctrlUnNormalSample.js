@@ -69,6 +69,9 @@ module.exports = {
         })
     },
 
+
+    //author: Jean
+    //esta rota busca o ultimo dado da tabela normal
     async getLastNormals(req,res){
         await normalSample.findAll({
             order: sequelize.literal('id DESC'),
