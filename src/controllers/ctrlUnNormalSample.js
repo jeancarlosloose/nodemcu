@@ -3,8 +3,9 @@ const {normalSample} = require('../models');
 const sequelize = require('sequelize');
 const Op = require('sequelize').Op
 
+
 function verifyUnNormal(reqBodyObject){
-    if(reqBodyObject.gas > 770 || reqBodyObject.temperature > 45.0 ){
+    if(reqBodyObject.gas >= 770 || reqBodyObject.temperature >= 45.0 ){
         return true
     }else
         return false
@@ -39,13 +40,16 @@ module.exports = {
             res.json(err)})
     },
 
+    //inseri dados na tabela unNormal e emit um evento através do socket io
     async insertUnNormal(req,res){
         console.log(req.body)
         if(verifyUnNormal(req.body)){
+            io.emit('unNormalNotify',req.body);
             await unNormalSample.create(
                 req.body
             ).then(result =>{
                 res.send(result)
+                
             })
         }else{
             await normalSample.create(

@@ -3,8 +3,11 @@ const path = require('path');
 const bodyparser = require('body-parser');
 const cors = require('cors');
 
-const router = express.Router();
 const app = express();
+const serverHttp = require('http').Server(app);
+const router = express.Router();
+io = require('socket.io')(serverHttp);
+
 
 app.use(express.static(__dirname+'/web'));
 
@@ -15,16 +18,17 @@ app.use(bodyparser.urlencoded({urlencoded: false}))
 app.use(require('./src/routes/route'))
 
 router.get('/txt',function(req,res){
-    res.sendFile(path.join(__dirname+'/web/teste.txt'));
+    res.sendFile(path.join(__dirname+'/web/index.html'));
   });
 app.use(express.static(__dirname + '/web'));
 
 app.use('/',router);
 
 
-app.listen(7070,()=>{
-    console.log('server on, and disponible on port 7070')
+serverHttp.listen(80,()=>{
+    console.log('server on, and disponible on port 80')
 })
 
-//testando
+
+
 
