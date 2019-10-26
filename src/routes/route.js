@@ -1,12 +1,10 @@
 const route = new require('express').Router();
 
 const ctrlUnNormalSample = require('../controllers/ctrlUnNormalSample');
-const ctrlNormalSample = require('../controllers/ctrlNormalSample');
 
-route.get('/normalsample',ctrlNormalSample.getAll);
-route.get('/unnormalsample',ctrlUnNormalSample.getAll);
 route.post('/insertData',ctrlUnNormalSample.insertUnNormal);
 route.get('/lastunnormal',ctrlUnNormalSample.getLastRegister);
-
+route.get('/various',ctrlUnNormalSample.getVariousUnNormals);
+route.get('/last',ctrlUnNormalSample.getLastNormals);
 
 module.exports = route;

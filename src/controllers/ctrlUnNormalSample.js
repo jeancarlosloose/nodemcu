@@ -3,8 +3,8 @@ const {normalSample} = require('../models');
 const sequelize = require('sequelize');
 const Op = require('sequelize').Op
 
-function verifyUnNormal(gas,temperature){
-    if(gas > 770 || temperature > 45.0 ){
+function verifyUnNormal(reqBodyObject){
+    if(reqBodyObject.gas > 770 || reqBodyObject.temperature > 45.0 ){
         return true
     }else
         return false
@@ -23,21 +23,25 @@ module.exports = {
     },
 
     async getLastRegister(req,res){
+        //console.log("comecei a requisicao");
         await unNormalSample.findAll({
             order: sequelize.literal('id DESC'),
             raw: true,
             limit: 1,
         }).then(
             result => {
-                res.json(result)
+                //console.log("fiz a requisicao")
+                console.log(result[0])
+                res.json(result[0])
             }
-        ).catch(err => {res.json(err)})
+        ).catch(err => {
+            //console.log("Parei aki")
+            res.json(err)})
     },
 
     async insertUnNormal(req,res){
-
         console.log(req.body)
-        if(verifyUnNormal(req.body.gas,req.body.temperature)){
+        if(verifyUnNormal(req.body)){
             await unNormalSample.create(
                 req.body
             ).then(result =>{
@@ -50,11 +54,32 @@ module.exports = {
                 res.send(result)
             })
         }
-
         
-    }
+    },
 
-    
+    async getVariousUnNormals(req,res){
+        await unNormalSample.findAll({
+            order: sequelize.literal('id DESC'),
+            raw: true,
+            limit: 20,
+        }).then(result => {
+            res.json(result)
+        }).catch(err =>{
+            res.send(err)
+        })
+    },
+
+    async getLastNormals(req,res){
+        await normalSample.findAll({
+            order: sequelize.literal('id DESC'),
+            raw: true,
+            limit: 1,
+        }).then(result => {
+            res.json(result)
+        }).catch(err =>{
+            res.send(err)
+        })
+    }
 
     
 
