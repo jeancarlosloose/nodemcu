@@ -8,10 +8,24 @@
 </head>
 <script src="../js/socket.io.js"></script>
 <script>
+  
+
   var socket = io('http://localhost');
   socket.on('unNormalNotify', function (data) {
     console.log(data);
   });
+
+  
+  setInterval(function(){
+    console.log('hello') 
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "insertData", true) 
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify({
+	        "temperature" : 45,
+	        "gas" : 780
+        }))
+    }, 3000);
 </script>
 
 <body>
