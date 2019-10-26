@@ -26,7 +26,7 @@ module.exports = {
         await unNormalSample.findAll({
             order: sequelize.literal('id DESC'),
             raw: true,
-            limit: 2,
+            limit: 1,
         }).then(
             result => {
                 res.json(result)
