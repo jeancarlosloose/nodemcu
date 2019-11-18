@@ -7,4 +7,6 @@ route.get('/lastunnormal',ctrlUnNormalSample.getLastRegister);
 route.get('/various',ctrlUnNormalSample.getVariousUnNormals);
 route.get('/last',ctrlUnNormalSample.getLastNormals);
 
+//mudei aqui
+
 module.exports = route;
