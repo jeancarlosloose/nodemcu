@@ -5,7 +5,7 @@ const Op = require('sequelize').Op
 
 
 function verifyUnNormal(reqBodyObject){
-    if(reqBodyObject.gas >= 770 || reqBodyObject.temperature >= 45.0 ){
+    if(reqBodyObject.gas >= 1000 || reqBodyObject.temperature >= 45.0 ){
         return true
     }else
         return false
@@ -65,23 +65,21 @@ module.exports = {
     },
 
     async getLastRegister(req,res){
-        //console.log("comecei a requisicao");
         await unNormalSample.findAll({
             order: sequelize.literal('id DESC'),
             raw: true,
             limit: 1,
         }).then(
             result => {
-                //console.log("fiz a requisicao")
                 console.log(result[0])
                 res.json(result[0])
             }
         ).catch(err => {
-            //console.log("Parei aki")
             res.json(err)})
     },
 
     //inseri dados na tabela unNormal e emit um evento através do socket io
+    
     async insertUnNormal(req,res){
         console.log(req.body)
         if(verifyUnNormal(req.body)){
@@ -119,8 +117,6 @@ module.exports = {
         })
     },
 
-
-    //author: Jean
     //esta rota busca o ultimo dado da tabela normal
     async getLastNormals(req,res){
        if(variableReturnRT.normal === true){
