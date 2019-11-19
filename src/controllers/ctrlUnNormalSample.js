@@ -11,12 +11,53 @@ function verifyUnNormal(reqBodyObject){
         return false
 }
 
+const getOneUnnormal = new Promise((res,rej)=>{
+    unNormalSample.findAll({
+        order: sequelize.literal('id DESC'),
+        raw: true,
+        limit: 1,
+    }).then(
+        result => {
+            //console.log("fiz a requisicao")
+            //console.log(result[0])
+            res(result[0])
+        }
+    ).catch(err => {
+        //console.log("Parei aki")
+        rej(err)
+    })
+})
+
+
+const getOneNormal = new Promise((resolve, reject)=>{
+    normalSample.findAll({
+        order: sequelize.literal('id DESC'),
+        raw: true,
+        limit: 1,
+    }).then(
+        result => {
+            //console.log("fiz a requisicao")
+            console.log(result[0])
+            resolve(result[0])
+        }
+    ).catch(err => {
+        //console.log("Parei aki")
+        reject(err)
+    })
+})
+
+
+
+let variableReturnRT = {
+    normal : true
+}
+
 
 
 module.exports = {
 
     async getAll(req,res){
-        await unNormalSample.findAll({includ : ['temparature','gas','createdAt']}).then(result => {
+        await unNormalSample.findAll({include : ['temparature','gas','createdAt']}).then(result => {
             return res.json(result);
         }).catch((err) => {
             res.json(err)
@@ -44,18 +85,23 @@ module.exports = {
     async insertUnNormal(req,res){
         console.log(req.body)
         if(verifyUnNormal(req.body)){
+            variableReturnRT.normal = false;
             io.emit('unNormalNotify',req.body);
             await unNormalSample.create(
                 req.body
             ).then(result =>{
-                res.send(result)
-                
+                res.send(result);
+            }).catch(err=>{ 
+                res.json(err)
             })
         }else{
+            variableReturnRT.normal = true;
             await normalSample.create(
                 req.body
             ).then(result =>{
                 res.send(result)
+            }).catch(err=>{
+                res.json(err)
             })
         }
         
@@ -77,17 +123,18 @@ module.exports = {
     //author: Jean
     //esta rota busca o ultimo dado da tabela normal
     async getLastNormals(req,res){
-        await normalSample.findAll({
-            order: sequelize.literal('id DESC'),
-            raw: true,
-            limit: 1,
-        }).then(result => {
-            res.json(result)
-        }).catch(err =>{
-            res.send(err)
-        })
-    }
-
+       if(variableReturnRT.normal === true){
+            getOneNormal.then(result=>{
+                res.json(result)
+            })
+       }else{
+           getOneUnnormal.then(result=>{
+               res.json(result)
+           })
+        }
+    },
     
+
+
 //teste
 }
