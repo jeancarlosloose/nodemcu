@@ -11,40 +11,44 @@ function verifyUnNormal(reqBodyObject){
         return false
 }
 
-const getOneUnnormal = new Promise((res,rej)=>{
-    unNormalSample.findAll({
-        order: sequelize.literal('id DESC'),
-        raw: true,
-        limit: 1,
-    }).then(
-        result => {
-            //console.log("fiz a requisicao")
-            //console.log(result[0])
-            res(result[0])
-        }
-    ).catch(err => {
-        //console.log("Parei aki")
-        rej(err)
-    })
-})
+function getOneUnnormal(){
+    return new Promise((res,rej)=>{
+        unNormalSample.findAll({
+              order: sequelize.literal('id DESC'),
+              raw: true,
+              limit: 1,
+          }).then(
+              result => {
+                  //console.log("fiz a requisicao")
+                  console.log(result[0])
+                  res(result[0])
+              }
+          ).catch(err => {
+              //console.log("Parei aki")
+              rej(err)
+          })
+      })
+} 
 
 
-const getOneNormal = new Promise((resolve, reject)=>{
-    normalSample.findAll({
-        order: sequelize.literal('id DESC'),
-        raw: true,
-        limit: 1,
-    }).then(
-        result => {
-            //console.log("fiz a requisicao")
-            console.log(result[0])
-            resolve(result[0])
-        }
-    ).catch(err => {
-        //console.log("Parei aki")
-        reject(err)
-    })
-})
+function getOneNormal(){
+    return new Promise((resolve, reject)=>{
+        normalSample.findAll({
+             order: sequelize.literal('id DESC'),
+             raw: true,
+             limit: 1,
+         }).then(
+             result => {
+                 //console.log("fiz a requisicao")
+                 console.log(result[0])
+                 resolve(result[0])
+             }
+         ).catch(err => {
+             //console.log("Parei aki")
+             reject(err)
+         })
+     })
+} 
 
 
 
@@ -120,11 +124,13 @@ module.exports = {
     //esta rota busca o ultimo dado da tabela normal
     async getLastNormals(req,res){
        if(variableReturnRT.normal === true){
-            getOneNormal.then(result=>{
+            getOneNormal().then(result=>{
+                console.log(result)
                 res.json(result)
             })
        }else{
-           getOneUnnormal.then(result=>{
+           getOneUnnormal().then(result=>{
+               console.log(result)
                res.json(result)
            })
         }
